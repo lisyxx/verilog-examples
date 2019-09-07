@@ -1,0 +1,27 @@
+# --------------------------------------------------------
+# makefile.questasim is used to auto-compile the testbench
+
+# target: dependency
+all: create_lib compile simulate
+
+create_lib:
+	vlib work
+
+compile:
+	vlog -l com.log para_adder.v para_adder_tb.v
+
+# simulate:
+# log command creates a waveform format file (wlf) which includes the
+# simulation data for all HDL objects whose names match the provided
+# specifiction. By default the file is named vsim.wlf and stored in
+# the current working directory. You can change the default name using
+# the "-wlf" option of vsim command or by setting the "WLFFilename"
+# variable in the modelsim.ini file.
+#
+# log -r * : log all objects in the design
+
+simulate:
+	vsim -l sim.log -c -novopt para_adder_tb -do "log -r *; run -all; quit -f"
+
+clean:
+	rm -rf work mti_lib transcript modelsim.ini *.log vsim.wlf
